@@ -29,7 +29,24 @@ MY_VAR
 SOMETHING_KEY="default-value"
 ```
 
-4. Deploy! It will get the values for the variables and put the `.env` file in the host where our application runs.
+4. It will then get the values for the variables and put the `.env` file in the host where our application runs.
+
+**NOTE:** You can get credential locally if you run the same comand:
+```shell
+genvv --env-vars my-env-vars > .env
+```
+
+### Providers
+
+The default providers are AWS Parameter Store and AWS Secrets Manager.
+
+Provider order is important, for example in `[vp1, vp2]`, values from vp1 will take precedence.
+
+The function signature of a provider is:
+
+```
+async (keys: Array<string>, config: Object) => Object
+```
 
 ```
 $ npm install -g genvv
@@ -52,60 +69,3 @@ Output options:
 See <https://github.com/mrtrom/genvv> for more complete docs.
 Please report bugs to <https://github.com/mrtrom/genvv/issues>.
 ```
-
-So, now in the Jenkinsfile of a project set a stage for genvv:
-
-```groovy
-pipeline {
-  agent any
-
-  environment {
-    PATH = "/usr/local/nvm/versions/node/v8.11.1/bin:$PATH"
-  }
-
-  stages {
-    stage('genvv') {
-      steps {
-        echo 'Creating ENV file...'
-        sh 'genvv --env-vars my-env-vars > .env'
-      }
-    }
-    stage('Release') {
-      steps {
-        echo 'Releasing...'
-        sh '...'
-      }
-    }
-  }
-}
-```
-
-**NOTICE** the ` > .env` to create the file.
-
-Please check [Jenkins docs about `environment`](https://jenkins.io/doc/pipeline/tour/environment/) and set the right NodeJS version.
-
-**NOTE:** You can also get credential locally if you run the same comand:
-```shell
-genvv --env-vars my-env-vars > .env
-```
-
-### Value Providers
-
-The default valueProviders are AWS Parameter Store and AWS Secrets Manager.
-
-Value provider order is important, for example in `[vp1, vp2]`, values from vp1 will take precedence.
-
-The function signature of a value provider is:
-
-```
-async (keys: Array<string>, config: Object) => Object
-```
-
-
-
-
-
-
-
-
-
