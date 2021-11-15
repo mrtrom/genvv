@@ -1,0 +1,90 @@
+#!/usr/bin/env node
+
+/**
+ * GPL v3
+ *
+ * genvv -- create .env file from AWS Parameter Store and Secrets Manager
+ *
+ * See <https://github.com/mrtrom/genvv>.
+ */
+
+const argv = require('minimist')(process.argv.slice(2));
+
+function getVersion() {
+  return `v${require('../package.json').version}`;
+}
+
+function printHelp() {
+  console.log(`
+    Usage:
+      genvv [OPTIONS] --env-vars [FILE]
+    
+    General options:
+      --help           Print this help info and exit.
+      --version        Print version of this command and exit.
+    
+    Runtime options:
+      --region         AWS region to use. E.g.: us-east-1.
+    
+    Output options:
+      --add-export     Add "export" before each ENV var.
+    
+    See <https://github.com/alltherooms/genvv> for more complete docs.
+    Please report bugs to <https://github.com/alltherooms/genvv/issues>.
+  `);
+}
+
+if (argv.help) return printHelp();
+if (argv.version) return console.log(getVersion());
+
+function cleanArgvs() {
+  const args = {
+    envVars: argv['env-vars'],
+    region: argv.region,
+    addExport: argv['add-export'],
+    providerPaths: argv['provider-paths'],
+  };
+
+  return args;
+}
+
+const runner = require('../dist/runner').default;
+runner({ params: cleanArgvs(), version: getVersion() })
+  .then(() => process.exit())
+  .catch(e => {
+    console.error(e);
+    process.exit(1);
+  });
+
+process.on('uncaughtException', err => {
+  function _indent(s) {
+    let lines = s.split(/\r?\n/);
+    for (var i = 0; i < lines.length; i++) {
+      lines[i] = '*     ' + lines[i];
+    }
+
+    return lines.join('\n');
+  }
+
+  const title = encodeURIComponent(
+    `genvv ${getVersion()} crashed: ${err.toString()}`
+  );
+
+  console.error(`
+       * genvv crashed!
+       *
+       * Please report this issue and include the details below:
+       *
+       *    https://github.com/alltherooms/genvv/issues/new?title=${title}
+       *
+       * * *
+       * platform:', process.platform
+       * node version:', process.version
+       * genvv version:', getVersion()
+       * argv: %j', process.argv
+       * stack:
+        ${_indent(err.stack)}
+    `);
+
+  process.exit(1);
+});

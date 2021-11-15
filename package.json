@@ -1,0 +1,53 @@
+{
+  "name": "@mrtrom/genvv",
+  "version": "0.0.1",
+  "description": "Genearte .env files based on data sources",
+  "bin": {
+    "genvv": "bin/genvv"
+  },
+  "main": "bin/genvv",
+  "scripts": {
+    "test": "npx jest test/get-env-vars.test.ts",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrtrom/genvv.git"
+  },
+  "keywords": [
+    "aws",
+    "secrets",
+    "credentials",
+    "vault",
+    "heroku"
+  ],
+  "author": "Alexander Ochoa",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/mrtrom/genvv/issues"
+  },
+  "homepage": "https://github.com/mrtrom/genvv#readme",
+  "dependencies": {
+    "aws-sdk": "^2.1028.0",
+    "minimist": "^1.2.5"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.7",
+    "@types/sinon": "^10.0.6",
+    "aws-sdk-mock": "^5.4.0",
+    "eslint": "^8.2.0",
+    "eslint-plugin-import": "^2.25.3",
+    "jest": "^27.3.1",
+    "prettier": "^2.4.1",
+    "sinon": "^12.0.1",
+    "ts-jest": "^27.0.7",
+    "typescript": "^4.4.4"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
+}
