@@ -23,7 +23,9 @@ const main = async ({
   const templateKeys = Object.keys(template);
 
   const data = await Promise.all(
-    providers.map((valueProvider: any) => valueProvider(templateKeys, config))
+    providers.map((provider: any) =>
+      provider({ keys: templateKeys, options: config })
+    )
   );
 
   if (data.find(entry => typeof entry !== 'object')) {

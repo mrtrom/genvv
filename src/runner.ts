@@ -30,7 +30,7 @@ const main = async ({ params, version }: IRunnerParams) => {
 
   const providers = providerPaths
     .filter(Boolean)
-    .map(path => (typeof path === 'function' ? path : require(path)));
+    .map(path => (typeof path === 'function' ? path : require(path).default));
 
   const print = ([key, value]: Array<any>) => {
     const line = `${addExport ?? 'export '}${key}=${cleanValue(value)}`;

@@ -17,7 +17,7 @@ export const parseLineAsKeyValue = (
 };
 
 export const cleanValue = (value: string | number) => {
-  return value === 'string'
+  return typeof value === 'string'
     ? `"${value.replace(/\\([\s\S])|(")/g, '\\$1$2')}"`
     : value;
 };

@@ -19,7 +19,7 @@ describe('[getEnvVars]', () => {
     expect(vp.args).toEqual([[Object.keys(constants), config]]);
   });
 
-  it('fails hard when request value is not returned valueProvider', async () => {
+  it('fails hard when request value is not returned provider', async () => {
     try {
       const vp1 = () =>
         Promise.resolve({ OTHER_VAR: 'lose', BADLY_SPACED_VAR: 'win' });
@@ -35,7 +35,7 @@ describe('[getEnvVars]', () => {
     }
   });
 
-  it('merges results form each valueProvider in order', async () => {
+  it('merges results form each provider in order', async () => {
     const vp1 = () =>
       Promise.resolve({ OTHER_VAR: 'vp1', AVAILABLE_VAR: 'vp1' });
     const vp2 = () =>
