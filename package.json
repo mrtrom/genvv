@@ -1,6 +1,6 @@
 {
   "name": "@mrtrom/genvv",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Genearte .env files based on data sources",
   "bin": {
     "genvv": "bin/genvv"
