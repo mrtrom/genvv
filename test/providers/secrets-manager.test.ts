@@ -12,7 +12,7 @@ describe('[secretsManager]', () => {
 
     const data = await secretsManager({
       keys: ['KEY1', 'KEY2'],
-      options: { region: 'neverland' },
+      options: { region: 'foo' },
     });
 
     expect(data).toEqual({ KEY1: 'KEY1-value', KEY2: 'KEY2-value' });
@@ -30,7 +30,7 @@ describe('[secretsManager]', () => {
 
     const data = await secretsManager({
       keys: ['KEY1', 'KEY2'],
-      options: { region: 'neverland' },
+      options: { region: 'foo' },
     });
 
     expect(data).toEqual({});

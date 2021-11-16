@@ -21,10 +21,15 @@ const PROVIDERS = {
 };
 
 const validateInputs = ({ params }: IRunnerParams) => {
-  const { isHeroku, isAws, envVars, herokuToken, herokuAppName } = params;
+  const { isHeroku, isAws, envVars, region, herokuToken, herokuAppName } =
+    params;
 
   if (isAws && !envVars) {
     throw new Error('"env-vars" parameter is required for AWS providers');
+  }
+
+  if (isAws && !region) {
+    throw new Error('"region" parameter is required for AWS providers');
   }
 
   if (isHeroku && !herokuToken) {

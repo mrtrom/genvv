@@ -8,7 +8,7 @@ describe('[getEnvVars]', () => {
       Promise.resolve({ AVAILABLE_VAR: 'vp1', OTHER_VAR: 12 })
     );
 
-    const config = { region: 'neverland' };
+    const config = { region: 'foo', isAws: true };
     await getEnvVars({
       fileLocation: './test/fixtures/simple.env',
       config,
@@ -26,7 +26,7 @@ describe('[getEnvVars]', () => {
       const vp1 = () =>
         Promise.resolve({ OTHER_VAR: 'lose', BADLY_SPACED_VAR: 'win' });
 
-      const config = { region: 'neverland' };
+      const config = { region: 'foo', isAws: true };
       await getEnvVars({
         fileLocation: './test/fixtures/simple.env',
         config,
@@ -43,7 +43,7 @@ describe('[getEnvVars]', () => {
     const vp2 = () =>
       Promise.resolve({ OTHER_VAR: 'vp2', BADLY_SPACED_VAR: 'vp2' });
 
-    const config = { region: 'neverland' };
+    const config = { region: 'foo', isAws: true };
     const data = await getEnvVars({
       fileLocation: './test/fixtures/simple.env',
       config,
