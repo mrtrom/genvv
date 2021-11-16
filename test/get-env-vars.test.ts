@@ -16,7 +16,9 @@ describe('[getEnvVars]', () => {
     });
 
     expect(vp.callCount).toBe(1);
-    expect(vp.args).toEqual([[Object.keys(constants), config]]);
+    expect(vp.args).toEqual([
+      [{ keys: Object.keys(constants), options: config }],
+    ]);
   });
 
   it('fails hard when request value is not returned provider', async () => {

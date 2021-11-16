@@ -20,17 +20,22 @@ function printHelp() {
       genvv [OPTIONS] --env-vars [FILE]
     
     General options:
-      --help           Print this help info and exit.
-      --version        Print version of this command and exit.
+      --help           Print this help info and exit
+      --version        Print version of this command and exit
     
     Runtime options:
-      --region         AWS region to use. E.g.: us-east-1.
+      --aws            Specifies we're gonna use AWS providers
+      --heroku         Specifies we're gonna use Heroku providers
+
+      AWS Options:
+        --region         AWS region to use. E.g.: us-east-1
+        --env-vars        Environment variables (file location) to look for in AWS providers
     
     Output options:
-      --add-export     Add "export" before each ENV var.
+      --add-export     Add "export" before each ENV var
     
-    See <https://github.com/alltherooms/genvv> for more complete docs.
-    Please report bugs to <https://github.com/alltherooms/genvv/issues>.
+    See <https://github.com/mrtrom/genvv> for more complete docs
+    Please report bugs to <https://github.com/mrtrom/genvv/issues>
   `);
 }
 
@@ -39,9 +44,13 @@ if (argv.version) return console.log(getVersion());
 
 function cleanArgvs() {
   const args = {
+    isAws: !!argv.aws,
+    isHeroku: !!argv.heroku,
     envVars: argv['env-vars'],
     region: argv.region,
     addExport: argv['add-export'],
+    herokuToken: argv['heroku-token'],
+    herokuAppName: argv['heroku-app-name'],
     providerPaths: argv['provider-paths'],
   };
 
@@ -75,7 +84,7 @@ process.on('uncaughtException', err => {
        *
        * Please report this issue and include the details below:
        *
-       *    https://github.com/alltherooms/genvv/issues/new?title=${title}
+       *    https://github.com/mrtrom/genvv/issues/new?title=${title}
        *
        * * *
        * platform:', process.platform

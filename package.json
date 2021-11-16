@@ -32,6 +32,7 @@
   "homepage": "https://github.com/mrtrom/genvv#readme",
   "dependencies": {
     "aws-sdk": "^2.1028.0",
+    "axios": "^0.24.0",
     "minimist": "^1.2.5"
   },
   "devDependencies": {
@@ -45,6 +46,7 @@
     "prettier": "^2.4.1",
     "sinon": "^12.0.1",
     "ts-jest": "^27.0.7",
+    "ts-node": "^10.4.0",
     "typescript": "^4.4.4"
   },
   "publishConfig": {

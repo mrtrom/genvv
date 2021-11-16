@@ -7,7 +7,7 @@ _It needs a file with the list of variables to set._
 ## Installation
 
 ```
-$ npm install -g @alltherooms/genvv
+$ npm install -g @mrtrom/genvv
 ```
 
 ## Usage

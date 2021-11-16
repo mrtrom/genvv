@@ -3,32 +3,68 @@ import { cleanValue } from './utils';
 
 interface IRunnerParams {
   params: {
-    envVars: Array<string>;
-    region: string;
+    isHeroku?: boolean;
+    isAws?: boolean;
+    envVars?: Array<string>;
+    region?: string;
     addExport: boolean;
+    herokuToken?: string;
+    herokuAppName?: string;
     providerPaths: Array<string>;
   };
   version: string;
 }
 
-const DEFAULT_VALUE_PROVIDERS = [
-  './providers/aws/secrets-manager',
-  './providers/aws/ssm',
-];
+const PROVIDERS = {
+  aws: ['./providers/aws/secrets-manager', './providers/aws/ssm'],
+  heroku: ['./providers/heroku'],
+};
 
-const main = async ({ params, version }: IRunnerParams) => {
-  const {
-    envVars,
-    region = 'us-east-1',
-    addExport,
-    providerPaths = DEFAULT_VALUE_PROVIDERS,
-  } = params;
+const validateInputs = ({ params }: IRunnerParams) => {
+  console.log(
+    '🚀 ~ file: runner.ts ~ line 24 ~ validateInputs ~ params',
+    params
+  );
+  const { isHeroku, isAws, envVars, herokuToken, herokuAppName } = params;
 
-  if (!envVars) {
-    throw new Error('"env-vars" parameter is required');
+  if (isAws && !envVars) {
+    throw new Error('"env-vars" parameter is required for AWS providers');
   }
 
-  const providers = providerPaths
+  if (isHeroku && !herokuToken) {
+    throw new Error('"heroku-token" parameter is required for Heroku provider');
+  }
+
+  if (isHeroku && !herokuAppName) {
+    throw new Error(
+      '"heroku-app-name" parameter is required for Heroku provider'
+    );
+  }
+};
+
+const main = async ({ params, version }: IRunnerParams) => {
+  validateInputs({ params, version });
+
+  const {
+    isHeroku,
+    isAws,
+    envVars,
+    region,
+    addExport,
+    herokuToken,
+    herokuAppName,
+    providerPaths,
+  } = params;
+
+  let providers = !providerPaths
+    ? isAws
+      ? PROVIDERS['aws']
+      : isHeroku
+      ? PROVIDERS['heroku']
+      : []
+    : [];
+
+  providers = providerPaths
     .filter(Boolean)
     .map(path => (typeof path === 'function' ? path : require(path).default));
 
@@ -39,11 +75,14 @@ const main = async ({ params, version }: IRunnerParams) => {
   };
 
   console.log(`# Created with genvv ${version}`);
-  console.log(`# AWS region ${region}`);
+
+  if (region) {
+    console.log(`# AWS region ${region}`);
+  }
 
   return getEnvVars({
     fileLocation: envVars,
-    config: { region },
+    config: { region, herokuToken, herokuAppName },
     providers,
   }).then(data => {
     Object.entries(data).map(print);

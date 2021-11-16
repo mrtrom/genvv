@@ -15,7 +15,6 @@ const main = async ({
   config,
   providers = [],
 }: IGetEnvVarsParams) => {
-  // const template = await mapFileToObject(fileLocation);
   const template =
     typeof fileLocation === 'string'
       ? await mapFileToObject(fileLocation)

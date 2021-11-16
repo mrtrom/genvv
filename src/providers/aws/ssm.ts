@@ -37,8 +37,8 @@ const main = async ({ keys, options }: ISSMConfiguration) => {
     .map((_, i, all) => all.slice(BATCH_SIZE * i, BATCH_SIZE * i + BATCH_SIZE))
     .filter(x => x.length);
 
-  return Promise.all(keyBatches.map(getParametersBatch)).then(datas => {
-    return Object.assign({}, ...datas);
+  return Promise.all(keyBatches.map(getParametersBatch)).then(data => {
+    return Object.assign({}, ...data);
   });
 };
 
