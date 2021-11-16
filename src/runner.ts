@@ -21,10 +21,6 @@ const PROVIDERS = {
 };
 
 const validateInputs = ({ params }: IRunnerParams) => {
-  console.log(
-    '🚀 ~ file: runner.ts ~ line 24 ~ validateInputs ~ params',
-    params
-  );
   const { isHeroku, isAws, envVars, herokuToken, herokuAppName } = params;
 
   if (isAws && !envVars) {
@@ -56,7 +52,7 @@ const main = async ({ params, version }: IRunnerParams) => {
     providerPaths,
   } = params;
 
-  let providers = !providerPaths
+  const providersToBeUsed = !providerPaths
     ? isAws
       ? PROVIDERS['aws']
       : isHeroku
@@ -64,12 +60,12 @@ const main = async ({ params, version }: IRunnerParams) => {
       : []
     : [];
 
-  providers = providerPaths
+  const providers = providersToBeUsed
     .filter(Boolean)
     .map(path => (typeof path === 'function' ? path : require(path).default));
 
   const print = ([key, value]: Array<any>) => {
-    const line = `${addExport ?? 'export '}${key}=${cleanValue(value)}`;
+    const line = `${addExport ? 'export ' : ''}${key}=${cleanValue(value)}`;
 
     console.log(line);
   };
