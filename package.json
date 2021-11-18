@@ -1,6 +1,6 @@
 {
   "name": "genvv",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Genearte .env files based on data sources",
   "bin": {
     "genvv": "bin/genvv"
