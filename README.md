@@ -8,7 +8,7 @@ This is a tool that helps creating environment files by collecting data from var
 $ npm install -g genvv
 ```
 
-### Providers
+## Providers
 
 The default providers for AWSare AWS Parameter Store and AWS Secrets Manager.
 
