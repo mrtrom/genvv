@@ -3,7 +3,9 @@
 /**
  * GPL v3
  *
- * genvv -- create .env file from AWS Parameter Store and Secrets Manager
+ * genvv -- create .env file from different providers like:
+ *       -- AWS
+ *       -- Heroku
  *
  * See <https://github.com/mrtrom/genvv>.
  */
@@ -20,16 +22,20 @@ function printHelp() {
       genvv [OPTIONS] --env-vars [FILE]
     
     General options:
-      --help           Print this help info and exit
-      --version        Print version of this command and exit
+      --help                Print this help info and exit
+      --version             Print version of this command and exit
     
     Runtime options:
-      --aws            Specifies we're gonna use AWS providers
-      --heroku         Specifies we're gonna use Heroku providers
+      --aws                 Specifies we're gonna use AWS providers
+      --heroku              Specifies we're gonna use Heroku providers
 
       AWS Options:
-        --region         AWS region to use. E.g.: us-east-1
-        --env-vars        Environment variables (file location) to look for in AWS providers
+        --region            AWS region to use. E.g.: us-east-1
+        --env-vars          Environment variables (file location) to look for in AWS providers
+      
+      Heroku Options:
+        --heroku-token      API Token
+        --heroku-app-name   App name from where we're getting the config variables
     
     Output options:
       --add-export     Add "export" before each ENV var

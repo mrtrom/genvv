@@ -1,5 +1,5 @@
 {
-  "name": "@mrtrom/genvv",
+  "name": "genvv",
   "version": "0.1.0",
   "description": "Genearte .env files based on data sources",
   "bin": {
@@ -22,7 +22,8 @@
     "secrets",
     "credentials",
     "vault",
-    "heroku"
+    "heroku",
+    "env"
   ],
   "author": "Alexander Ochoa",
   "license": "GPL-3.0-or-later",

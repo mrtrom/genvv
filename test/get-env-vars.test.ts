@@ -4,33 +4,33 @@ import { constants } from './fixtures/simple';
 
 describe('[getEnvVars]', () => {
   it('calls all given value providers', async () => {
-    const vp = sinon.spy(() =>
-      Promise.resolve({ AVAILABLE_VAR: 'vp1', OTHER_VAR: 12 })
+    const provider = sinon.spy(() =>
+      Promise.resolve({ AVAILABLE_VAR: 'provider1', OTHER_VAR: 12 })
     );
 
     const config = { region: 'foo', isAws: true };
     await getEnvVars({
       fileLocation: './test/fixtures/simple.env',
       config,
-      providers: [vp],
+      providers: [provider],
     });
 
-    expect(vp.callCount).toBe(1);
-    expect(vp.args).toEqual([
+    expect(provider.callCount).toBe(1);
+    expect(provider.args).toEqual([
       [{ keys: Object.keys(constants), options: config }],
     ]);
   });
 
   it('fails hard when request value is not returned provider', async () => {
     try {
-      const vp1 = () =>
+      const provider = () =>
         Promise.resolve({ OTHER_VAR: 'lose', BADLY_SPACED_VAR: 'win' });
 
       const config = { region: 'foo', isAws: true };
       await getEnvVars({
         fileLocation: './test/fixtures/simple.env',
         config,
-        providers: [vp1],
+        providers: [provider],
       });
     } catch (e) {
       expect(e).not.toBeFalsy();
@@ -38,21 +38,24 @@ describe('[getEnvVars]', () => {
   });
 
   it('merges results form each provider in order', async () => {
-    const vp1 = () =>
-      Promise.resolve({ OTHER_VAR: 'vp1', AVAILABLE_VAR: 'vp1' });
-    const vp2 = () =>
-      Promise.resolve({ OTHER_VAR: 'vp2', BADLY_SPACED_VAR: 'vp2' });
+    const provider1 = () =>
+      Promise.resolve({ OTHER_VAR: 'provider1', AVAILABLE_VAR: 'provider1' });
+    const provider2 = () =>
+      Promise.resolve({
+        OTHER_VAR: 'provider2',
+        BADLY_SPACED_VAR: 'provider2',
+      });
 
     const config = { region: 'foo', isAws: true };
     const data = await getEnvVars({
       fileLocation: './test/fixtures/simple.env',
       config,
-      providers: [vp1, vp2],
+      providers: [provider1, provider2],
     });
     expect(data).toEqual({
-      OTHER_VAR: 'vp1',
-      AVAILABLE_VAR: 'vp1',
-      BADLY_SPACED_VAR: 'vp2',
+      OTHER_VAR: 'provider1',
+      AVAILABLE_VAR: 'provider1',
+      BADLY_SPACED_VAR: 'provider2',
       PREFILLED_VAR: 42,
     });
   });
