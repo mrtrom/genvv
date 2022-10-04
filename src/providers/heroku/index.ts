@@ -25,13 +25,4 @@ const main = async ({ options }: IHerokuConfiguration) => {
   return data;
 };
 
-// (async () => {
-//   main({
-//     options: {
-//       herokuToken: 'c8af1121-ddcc-44be-aa94-78134a578352',
-//       herokuAppName: 'growth-service-develop',
-//     },
-//   });
-// })();
-
 export default main;

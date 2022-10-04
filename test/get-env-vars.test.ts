@@ -55,8 +55,9 @@ describe('[getEnvVars]', () => {
     expect(data).toEqual({
       OTHER_VAR: 'provider1',
       AVAILABLE_VAR: 'provider1',
-      BADLY_SPACED_VAR: 'provider2',
+      BADLY_SPACED_VAR: 'here',
       PREFILLED_VAR: 42,
+      EMPTY_STRING: '',
     });
   });
 });

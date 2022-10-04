@@ -4,6 +4,10 @@ export const isNotCommentLine = (line: string) => {
   return line[0] !== COMMENT_TOKEN;
 };
 
+export const cleanEmptyString = (value: string) => {
+  return value === '""' ? '' : value;
+};
+
 export const parseLineAsKeyValue = (
   line: string
 ): [string, string | number] => {
@@ -13,7 +17,7 @@ export const parseLineAsKeyValue = (
       .filter(Boolean)
       .map(p => p.replace(/\s+/g, '')) || [];
 
-  return [key, !isNaN(+value) ? +value : value];
+  return [key, !isNaN(+value) ? +value : cleanEmptyString(value)];
 };
 
 export const cleanValue = (value: string | number) => {

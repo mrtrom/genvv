@@ -3,4 +3,5 @@ export const constants = {
   OTHER_VAR: undefined,
   PREFILLED_VAR: 42,
   BADLY_SPACED_VAR: 'here',
+  EMPTY_STRING: '',
 };

@@ -31,8 +31,13 @@ const main = async ({
     throw new Error('providers must return an object');
   }
 
-  // create and array of all data, including template values
-  const parts = [{}, template].concat(data.reverse());
+  // clean template from undefined values
+  Object.keys(template).forEach(
+    key => template[key] === undefined && delete template[key]
+  );
+
+  // create an array of all data, including template values
+  let parts = [{}].concat(data.reverse()).concat(template);
 
   // merge values with latter elements taking precedence
   const result = Object.assign({}, ...parts);
