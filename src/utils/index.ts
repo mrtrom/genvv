@@ -8,6 +8,10 @@ export const cleanEmptyString = (value: string) => {
   return value === '""' ? '' : value;
 };
 
+export const cleanKey = (key: string) => {
+  return key?.replace('export', '');
+};
+
 export const parseLineAsKeyValue = (
   line: string
 ): [string, string | number] => {
@@ -17,7 +21,7 @@ export const parseLineAsKeyValue = (
       .filter(Boolean)
       .map(p => p.replace(/\s+/g, '')) || [];
 
-  return [key, !isNaN(+value) ? +value : cleanEmptyString(value)];
+  return [cleanKey(key), !isNaN(+value) ? +value : cleanEmptyString(value)];
 };
 
 export const cleanValue = (value: string | number) => {

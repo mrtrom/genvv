@@ -58,6 +58,7 @@ describe('[getEnvVars]', () => {
       BADLY_SPACED_VAR: 'here',
       PREFILLED_VAR: 42,
       EMPTY_STRING: '',
+      EXPORTED_VAR: 3,
     });
   });
 });
