@@ -24,6 +24,7 @@ function printHelp() {
     General options:
       --help                Print this help info and exit
       --version             Print version of this command and exit
+      --allow-missing       Allow missing ENV vars between providers and .env file
     
     Runtime options:
       --aws                 Specifies we're gonna use AWS providers
@@ -58,12 +59,14 @@ function cleanArgvs() {
     herokuToken: argv['heroku-token'],
     herokuAppName: argv['heroku-app-name'],
     providerPaths: argv['provider-paths'],
+    allowMissing: argv['allow-missing'],
   };
 
   return args;
 }
 
 const runner = require('../dist/runner').default;
+
 runner({ params: cleanArgvs(), version: getVersion() })
   .then(() => process.exit())
   .catch(e => {

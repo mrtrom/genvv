@@ -11,6 +11,7 @@ interface IRunnerParams {
     herokuToken?: string;
     herokuAppName?: string;
     providerPaths: Array<string>;
+    allowMissing?: boolean;
   };
   version: string;
 }
@@ -61,6 +62,7 @@ const main = async ({ params, version }: IRunnerParams) => {
     herokuToken,
     herokuAppName,
     providerPaths,
+    allowMissing,
   } = params;
 
   const providersToBeUsed = !providerPaths
@@ -91,6 +93,7 @@ const main = async ({ params, version }: IRunnerParams) => {
     fileLocation: envVars,
     config: { region, herokuToken, herokuAppName },
     providers,
+    allowMissing,
   }).then(keyValueTuples => {
     keyValueTuples.map(print);
 
