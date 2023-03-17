@@ -51,13 +51,10 @@ const main = async ({
 
   const templateKeys = template?.map(([key]) => key);
   if (!allowMissing && templateKeys) {
-    // get a list of keys that have values
-    const filledKeys = result
-      .filter(([key, value]) => !!value)
-      .map(([key]) => key);
+    const resultKeys = result.map(([key]) => key);
 
     // get a list of keys missing from the results
-    const missingKeys = difference(templateKeys, filledKeys);
+    const missingKeys = difference(templateKeys, resultKeys);
 
     // throw error if not all of the keys have been filled with values
     if (missingKeys.length) {
