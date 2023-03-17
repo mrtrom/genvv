@@ -8,7 +8,6 @@ interface IGetEnvVarsParams {
   fileLocation?: string;
   config: any;
   providers: Provider[];
-  allowMissing?: boolean;
 }
 
 const difference = (a: Array<any>, b: Array<any>) => {
@@ -19,7 +18,6 @@ const main = async ({
   fileLocation,
   config,
   providers = [],
-  allowMissing = false,
 }: IGetEnvVarsParams): Promise<KeyValueTuple[]> => {
   const template = fileLocation
     ? await mapFileToKeyValueTuple(fileLocation)
@@ -50,7 +48,7 @@ const main = async ({
   ];
 
   const templateKeys = template?.map(([key]) => key);
-  if (!allowMissing && templateKeys) {
+  if (templateKeys) {
     const resultKeys = result.map(([key]) => key);
 
     // get a list of keys missing from the results
