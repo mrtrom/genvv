@@ -24,7 +24,9 @@ const main = async ({
   const template = fileLocation
     ? await mapFileToKeyValueTuple(fileLocation)
     : undefined;
-  const filledTemplateEnvs = (template || []).filter(([key, value]) => !!value);
+  const filledTemplateEnvs = (template || []).filter(
+    ([, value]) => value !== undefined
+  );
 
   const providedEnvs = await Promise.all(
     providers.map(provider => provider({ keys: templateKeys, options: config }))
