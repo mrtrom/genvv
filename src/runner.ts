@@ -5,7 +5,7 @@ interface IRunnerParams {
   params: {
     isHeroku?: boolean;
     isAws?: boolean;
-    envVars?: Array<string>;
+    envVars?: string;
     region?: string;
     addExport: boolean;
     herokuToken?: string;
@@ -91,8 +91,8 @@ const main = async ({ params, version }: IRunnerParams) => {
     fileLocation: envVars,
     config: { region, herokuToken, herokuAppName },
     providers,
-  }).then(data => {
-    Object.entries(data).map(print);
+  }).then(keyValueTuples => {
+    keyValueTuples.map(print);
 
     console.log(`# Done! Generated on ${new Date(Date.now())}`);
   });

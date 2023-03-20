@@ -1,9 +1,13 @@
-import mapFileToObject from './map-env-file-to-object';
+import mapFileToKeyValueTuple, {
+  KeyValueTuple,
+} from './map-env-file-to-key-value-tuple';
+
+type Provider = (params: any) => Promise<Record<string, string>>;
 
 interface IGetEnvVarsParams {
-  fileLocation: any;
+  fileLocation?: string;
   config: any;
-  providers: any;
+  providers: Provider[];
 }
 
 const difference = (a: Array<any>, b: Array<any>) => {
@@ -14,45 +18,48 @@ const main = async ({
   fileLocation,
   config,
   providers = [],
-}: IGetEnvVarsParams) => {
-  const template =
-    typeof fileLocation === 'string'
-      ? await mapFileToObject(fileLocation)
-      : Promise.resolve(fileLocation);
-  const templateKeys = Object.keys(template);
-
-  const data = await Promise.all(
-    providers.map((provider: any) =>
-      provider({ keys: templateKeys, options: config })
-    )
+}: IGetEnvVarsParams): Promise<KeyValueTuple[]> => {
+  const template = fileLocation
+    ? await mapFileToKeyValueTuple(fileLocation)
+    : undefined;
+  const filledTemplateEnvs = (template || []).filter(
+    ([, value]) => value !== undefined
   );
 
-  if (data.find(entry => typeof entry !== 'object')) {
+  const providedEnvs = await Promise.all(
+    providers.map(provider => provider({ keys: templateKeys, options: config }))
+  );
+
+  if (providedEnvs.find(env => typeof env !== 'object')) {
     throw new Error('providers must return an object');
   }
 
-  // clean template from undefined values
-  Object.keys(template).forEach(
-    key => template[key] === undefined && delete template[key]
-  );
+  const mergedProvidedEnvs = Object.assign({}, ...providedEnvs) as Record<
+    string,
+    string
+  >;
 
-  // create an array of all data, including template values
-  let parts = [{}].concat(data.reverse()).concat(template);
+  // merge template tuples with fetched envs but keep the template values when defined
+  const result = [
+    ...filledTemplateEnvs,
+    ...Object.entries(mergedProvidedEnvs).filter(
+      ([key]) => !filledTemplateEnvs?.find(([_key, value]) => _key === key)
+    ),
+  ];
 
-  // merge values with latter elements taking precedence
-  const result = Object.assign({}, ...parts);
+  const templateKeys = template?.map(([key]) => key);
+  if (templateKeys) {
+    const resultKeys = result.map(([key]) => key);
 
-  // get a list of keys that have values
-  const filledKeys = Object.keys(result as Record<string, any>).filter(
-    (key: string) => result[key as any] !== undefined
-  );
+    // get a list of keys missing from the results
+    const missingKeys = difference(templateKeys, resultKeys);
 
-  // get a list of keys missing from the results
-  const missingKeys = difference(templateKeys, filledKeys);
-
-  // throw error if not all of the keys have been filled with values
-  if (missingKeys.length) {
-    throw new Error(`Result is missing required values: ${missingKeys.join()}`);
+    // throw error if not all of the keys have been filled with values
+    if (missingKeys.length) {
+      throw new Error(
+        `Result is missing required values: ${missingKeys.join()}`
+      );
+    }
   }
 
   return result;
